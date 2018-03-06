@@ -129,7 +129,7 @@ Example Response:
     }
 }
 ```
-##### 4.3. Add a reservation to a table.
+##### 4.2. Add a reservation to a table.
 This endpoint will add a reservation with a customer name and a given timeslot.
 
 | HTTP Method | Path |
@@ -147,7 +147,7 @@ Request Body Parameters:
 Possible return codes:
 
 | HTTP Status Code | Message |
-| --------------   -- | ------- |
+| ---------------- | ------- |
 | 200 | OK |
 | 409 | Conflict |
 
