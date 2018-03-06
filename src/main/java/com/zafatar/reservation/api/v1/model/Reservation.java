@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.zafatar.reservation.model.mapping.ReservationJsonSerializer;
+import com.zafatar.reservation.api.v1.model.mapping.ReservationJsonSerializer;
 
 @JsonSerialize(using = ReservationJsonSerializer.class)
 // - This JsonDeserialize is commented because we don't need this for now.
