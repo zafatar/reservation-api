@@ -18,6 +18,10 @@ public class Reservation implements Serializable {
 
 	public Reservation() {
 	}
+	
+	public Reservation(String customerName, String from, String to) {
+		this(customerName, new TimeSlot(from, to));
+	}
 
 	public Reservation(String customerName, TimeSlot timeSlot) {
 		this.customerName = customerName;

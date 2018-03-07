@@ -6,9 +6,7 @@ import java.util.List;
 
 import com.zafatar.reservation.api.v1.exceptions.ReservationConflictException;
 
-// @JsonSerialize(using = TableJsonSerializer.class)
 public class Table implements Serializable {
-	// private static final Logger log = LoggerFactory.getLogger(Table.class);
 	private static final long serialVersionUID = 42L;
 	
 	private int			  	  id;
@@ -17,6 +15,10 @@ public class Table implements Serializable {
 	
 	public Table() {
 		this.reservations = new ArrayList<Reservation>();
+	}
+	
+	public Table(String name) {
+		this.name = name;
 	}
 	
 	public void addReservation(Reservation reservation) throws ReservationConflictException {
