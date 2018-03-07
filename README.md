@@ -76,7 +76,7 @@ Example Response:
     "status": "CREATED",
     "message": "Table created",
     "data": {
-    	    "id": 1,	
+    	    "id": 1,
 	    "name": "Table with Lago di Garda view",
 	    "reservations":  []
     }
@@ -142,7 +142,7 @@ Request Body Parameters:
 | ------ | ----- | ----- |
 | customer_name | String | * |
 | timeslot.from | datetime as String | |
-| timeslot.to   | datetime as String | | 
+| timeslot.to   | datetime as String | |
 
 Possible return codes:
 
@@ -186,4 +186,4 @@ Example Response:
 ### 5. Future works.
  - Better error handling (ex. the case of missing parameters in Table POST).
  - Bugfixes if any found.
- - Writing some integration tests.
+ - Writing some integration tests. (Mock the Redis Server)
