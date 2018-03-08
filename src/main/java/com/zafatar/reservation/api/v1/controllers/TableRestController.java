@@ -1,5 +1,7 @@
 package com.zafatar.reservation.api.v1.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zafatar.reservation.api.v1.exceptions.InvalidTimeFormatException;
 import com.zafatar.reservation.api.v1.exceptions.ReservationConflictException;
 import com.zafatar.reservation.api.v1.exceptions.TableNotFoundException;
 import com.zafatar.reservation.api.v1.model.Reservation;
@@ -19,7 +22,7 @@ import com.zafatar.reservation.api.v1.repository.TableRepository;
 @RestController
 @RequestMapping("/api/v1/table")
 public class TableRestController {
-	// private static final Logger log = LoggerFactory.getLogger(TableRestController.class);
+	private static final Logger log = LoggerFactory.getLogger(TableRestController.class);
 	private final TableRepository tableRepository;
 
 	@Autowired
@@ -53,16 +56,22 @@ public class TableRestController {
 	 * @throws TableNotFoundException
 	 *             404 for the tables
 	 * @throws ReservationConflictException
+	 * @throws InvalidTimeFormatException 
 	 * 			
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/reservation")
 	ResponseEntity<ApiResponse> addReservationToTable(@PathVariable int id, @RequestBody Reservation reservation)
-			throws TableNotFoundException, ReservationConflictException, Exception {
+			throws TableNotFoundException, ReservationConflictException, InvalidTimeFormatException {
+		
+		if(!reservation.getTimeSlot().isValid()) {
+			log.debug("Exception: reservation time slot is not valid.");
+		}
+		
 		// Find the table by id and then add the reservation.
 		Table table = this.tableRepository.findById(id);
 		table.addReservation(reservation);
 		this.tableRepository.update(table);
-
+		
 		ApiResponse ar = new ApiResponse(HttpStatus.OK, "Reservation added", table);
 		return new ResponseEntity<ApiResponse>(ar, ar.getStatus());
 	}

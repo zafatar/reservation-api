@@ -1,9 +1,21 @@
 package com.zafatar.reservation.api.v1.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.zafatar.reservation.api.v1.exceptions.InvalidTimeFormatException;
 
 public class TimeSlot implements Serializable {
-	private static final long serialVersionUID = 11L;	
+	private static final long serialVersionUID = 11L;
+	private static final Logger log = LoggerFactory.getLogger(TimeSlot.class);
+	
+	private final String timeFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
+
 	// TODO: TimeSlot object should hold Date Time objects
 	//       not just bare String
 	private String from;
@@ -58,15 +70,38 @@ public class TimeSlot implements Serializable {
 	 * that from should be smaller than to as simple string comparison.
 	 * 
 	 * @return boolean flag of the validity (by default TRUE)
+	 * @throws InvalidTimeFormatException 
 	 */
-	public boolean isValid() {
-		boolean valid = true;
-
+	public boolean isValid() throws InvalidTimeFormatException {
+		// 1. Check date formats.
+		if ( !this.isDateTimeValid(this.getFrom()) ) {
+			throw new InvalidTimeFormatException("Not Valid Time:" + this.getFrom());
+		} 
+		
+		if ( !this.isDateTimeValid(this.getTo()) ) {
+			throw new InvalidTimeFormatException("Not Valid Time:" + this.getTo());
+		} 
+		
+		// 2. Check if from > to.
 		int compare = this.getFrom().compareTo(this.getTo());
 		if (compare > 0) {
-			valid = false;
+			throw new InvalidTimeFormatException("From: " + this.getFrom() + " should be older than To: " + this.getTo() );
 		}
-
-		return valid;
+		
+		return true;
 	}
+	
+    private boolean isDateTimeValid(String time) { 	
+		DateFormat sdf = new SimpleDateFormat(this.timeFormat);
+		sdf.setLenient(false);
+		try {
+			Date date = sdf.parse(time);
+			log.debug("Date Time parsing completed for " + date.toString());
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return false;
+		}
+		
+		return true;
+    }
 }
